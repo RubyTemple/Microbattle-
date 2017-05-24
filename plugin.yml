@@ -1,0 +1,16 @@
+name: Clans
+author: Emis Founder ItaSkyGames
+description: Plugin dei Clans
+version: 2.0.0.2
+main: Clans\FactionMain
+api:
+- 1.12.0
+- 2.0.0
+commands:
+  c:
+    description: usa /c help per la lista dei comandi
+    permission: c.command
+permissions:
+  c.command:
+    default: true
+    description: "Plugin dei Clans"
