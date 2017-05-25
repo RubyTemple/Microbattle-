@@ -1,7 +1,7 @@
 name: Clans
 author: Emis Founder ItaSkyGames
 description: Plugin dei Clans
-version: 2.0.0.2
+version: 1.1.8
 main: Clans\FactionMain
 api:
 - 1.12.0
