@@ -26,7 +26,7 @@ class FactionMain extends PluginBase implements Listener {
 	public $wars = [];
 	public $war_players = [];
 	public function onEnable() {
-		$this->getLogger()->info(TEXTFORMAT::YELLOW . "[Emis]" .TEXTFORMAT::RED. " >>" .TEXTFORMAT::AQUA.  "Clans plugin for ITASKYGAMES");
+		$this->getLogger()->info(TEXTFORMAT::YELLOW . "[Emis (traduttore italiano|inglese)]" .TEXTFORMAT::RED. " >>" .TEXTFORMAT::AQUA.  "Clans plugin for ITASKYGAMES");
 		$this->getLogger()->info(TEXTFORMAT::YELLOW . "[Clans]" .TEXTFORMAT::RED. " >>" .TEXTFORMAT::AQUA.  " è attivo!");		
 		
 		@mkdir($this->getDataFolder());
