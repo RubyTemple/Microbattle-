@@ -83,10 +83,10 @@ class FactionListener implements Listener {
 	public function factionPVP(EntityDamageEvent $factionDamage) {
 		if($factionDamage instanceof EntityDamageByEntityEvent) {
 			if(!($factionDamage->getEntity() instanceof Player) or !($factionDamage->getDamager() instanceof Player)) {
-				return false;
+				return true;
 			}
-			if(($this->plugin->isInFaction($factionDamage->getEntity()->getPlayer()->getName()) == true) or ($this->plugin->isInFaction($factionDamage->getDamager()->getPlayer()->getName()) == false)) {
-				return false;
+			if(($this->plugin->isInFaction($factionDamage->getEntity()->getPlayer()->getName()) == false) or ($this->plugin->isInFaction($factionDamage->getDamager()->getPlayer()->getName()) == false)) {
+				return true;
 			}
 			if(($factionDamage->getEntity() instanceof Player) and ($factionDamage->getDamager() instanceof Player)) {
 				$player1 = $factionDamage->getEntity()->getPlayer()->getName();

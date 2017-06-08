@@ -1,20 +1,6 @@
 <?php
 
-namespace 	Clans;
-
-/*
- * 
- * v1.3.0 To Do List
- * [X] Separate into Command, Listener, and Main files
- * [X] Implement commands (plot claim, plot del)
- * [X] Get plots to work
- * [X] Add plot to config
- * [X] Add faction description /f desc <faction>
- * [X] Only leaders can edit motd, only members can check
- * [X] More beautiful looking (and working) config
- * 
- * 
- */
+namespace Clans;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\CommandSender;
@@ -31,7 +17,6 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\block\Snow;
 use pocketmine\math\Vector3;
 use pocketmine\level\Position;
-
 
 class FactionMain extends PluginBase implements Listener {
 
@@ -57,11 +42,11 @@ class FactionMain extends PluginBase implements Listener {
 		$this->fCommand = new FactionCommands($this);
 		
 		$this->prefs = new Config($this->getDataFolder() . "Prefs.yml", CONFIG::YAML, array(
-				"MaxFactionNameLength" => 15,
-				"MaxPlayersPerFaction" => 100,
-				"OnlyLeadersAndOfficersCanInvite" => true,
-				"OfficersCanClaim" => true,
-				"PlotSize" => 50,
+		"MaxFactionNameLength" => 15,
+		"MaxPlayersPerFaction" => 100,
+		"OnlyLeadersAndOfficersCanInvite" => true,
+		"OfficersCanClaim" => true,
+		"PlotSize" => 50,
                 "PlayersNeededInFactionToClaimAPlot" => 3,
                 "PowerNeededToClaimAPlot" => 1000,
                 "PowerNeededToSetOrUpdateAHome" => 10,
@@ -213,9 +198,9 @@ class FactionMain extends PluginBase implements Listener {
         while($resultArr = $result->fetchArray(SQLITE3_ASSOC)){
             $row[$i]['player'] = $resultArr['player'];
             if($this->getServer()->getPlayerExact($row[$i]['player']) instanceof Player){
-               $team .= TextFormat::ITALIC.TextFormat::WHITE.$row[$i]['player'].TextFormat::GREEN." [Online] ".TextFormat::RESET.TextFormat::WHITE." - ".TextFormat::RESET;
+               $team .= TextFormat::ITALIC . TextFormat::WHITE . $row[$i]['player'] . TextFormat::GREEN . " [Online] " . TextFormat::RESET . " - ";
             } else {
-               $team .= TextFormat::ITALIC.TextFormat::GRAY.$row[$i]['player'].TextFormat::RED." [OFF] ".TextFormat::RESET.TextFormat::WHITE." - ".TextFormat::RESET;
+               $team .= TextFormat::ITALIC . TextFormat::GRAY . $row[$i]['player'] . TextFormat::RED." [Offline] " . TextFormat::RESET . " - " . TextFormat::RESET;
             }
             $i = $i + 1;
         }
@@ -231,12 +216,11 @@ class FactionMain extends PluginBase implements Listener {
         $i = 0;
         while($resultArr = $result->fetchArray(SQLITE3_ASSOC)){
             $row[$i]['faction2'] = $resultArr['faction2'];
-            $team .= TextFormat::ITALIC.TextFormat::RED.$row[$i]['faction2'].TextFormat::RESET.TextFormat::YELLOW." §7/§e ".TextFormat::RESET;
+            $team .= TextFormat::ITALIC . TextFormat::RED . $row[$i]['faction2'] . TextFormat::RESET . TextFormat::YELLOW . " §7/§e " . TextFormat::RESET;
             $i = $i + 1;
         }
         
-        $s->sendMessage($this->formatMessage("§7- 
- Alianças do CLAN §b$faction§7 -",true));
+        $s->sendMessage($this->formatMessage("§7- Alleanze del clan §b$faction§7 -",true));
         $s->sendMessage($team);
     }
     public function sendListOfTop10FactionsTo($s){
@@ -244,13 +228,13 @@ class FactionMain extends PluginBase implements Listener {
         $result = $this->db->query("SELECT faction FROM strength ORDER BY power DESC LIMIT 10;");
         $row = array();
         $i = 0;
-        $s->sendMessage($this->formatMessage("§bMelhores Clans do servidor",true));
+        $s->sendMessage($this->formatMessage("§bMigliori clan del server",true));
         while($resultArr = $result->fetchArray(SQLITE3_ASSOC)){
             $j = $i + 1;
             $cf = $resultArr['faction'];
             $pf = $this->getFactionPower($cf);
             $df = $this->getNumberOfPlayers($cf);
-            $s->sendMessage(TextFormat::GOLD.TextFormat::GOLD."§a§o$j  ".TextFormat::GREEN."§7§o$cf".TextFormat::AQUA." §a§oPoder ".TextFormat::GRAY."§7§o$pf §a§opoder".TextFormat::GOLD." §7§oJogadores ".TextFormat::GREEN."§a§o$df ".TextFormat::RESET);
+            $s->sendMessage(TextFormat::GOLD . "§a§o$j " . TextFormat::GREEN . "§7§o$cf" . TextFormat::AQUA . " §a§oPotere " . TextFormat::GRAY . "§7§o$pf §a§opotere " . TextFormat::GOLD . " §7§oGiocatori " . TextFormat::GREEN . "§a§o$df " . TextFormat::RESET);
             $i = $i + 1;
         } 
         
@@ -316,13 +300,13 @@ class FactionMain extends PluginBase implements Listener {
             
             if($this->prefs->get("EnableOverClaim")){
                 if($power_sender < $power_claimedBy){
-                    $sender->sendMessage($this->formatMessage("Área dominada por $claimedBy Poder $power_claimedBy STR. Poder de seu Clan $power_sender power. Você não tem poder para dar overclaim."));
+                    $sender->sendMessage($this->formatMessage("Area dominata dal clan $claimedBy con potere $power_claimedBy STR. Potere del tuo clan: $power_sender power. Non hai abbastanza potere per conquistarla."));
                 } else {
-                    $sender->sendMessage($this->formatMessage("Área dominada pelo CLAN $claimedBy Poder $power_claimedBy STR. Poder do seu Clan $power_sender power. Use /clan overclaim para dominar este terreno."));
+                    $sender->sendMessage($this->formatMessage("Area dominata dal clan $claimedBy con potere $power_claimedBy STR. Potere del tuo clan: $power_sender power. Usa /clan overclaim per dominare questo terreno."));
                 }
                 return false;
             } else {
-			    $sender->sendMessage($this->formatMessage("Overclaiming is disabled."));
+			    $sender->sendMessage($this->formatMessage("L'Overclaiming è disabilitato."));
 			    return false;
             }
 		}
@@ -367,9 +351,9 @@ class FactionMain extends PluginBase implements Listener {
 	
 	public function formatMessage($string, $confirm = false) {
 		if($confirm) {
-			return TextFormat::ITALIC . TextFormat::GRAY . "§8[" . TextFormat::GOLD . "§r§e§oClans§r" . TextFormat::GRAY . "§8]" . TextFormat::YELLOW . "§7$string";
+			return TextFormat::ITALIC . TextFormat::GRAY . "§8[" . TextFormat::GOLD . "§r§e§oClan§r" . TextFormat::GRAY . "§8]" . TextFormat::YELLOW . "§7$string";
 		} else {	
-			return TextFormat::ITALIC . TextFormat::GRAY . "§8[" . TextFormat::GOLD . "§e§oClans§r" . TextFormat::GRAY . "§8] " . TextFormat::YELLOW . "§7$string";
+			return TextFormat::ITALIC . TextFormat::GRAY . "§8[" . TextFormat::GOLD . "§e§oClan§r" . TextFormat::GRAY . "§8] " . TextFormat::YELLOW . "§7$string";
 		}
 	}
 	
@@ -403,7 +387,8 @@ class FactionMain extends PluginBase implements Listener {
     }
 
     public function onDisable() {
-        $this->db->close();
+	    $this->getLogger()->info(TextFormat::RED . "Plugin Clan disabilitato");
+            $this->db->close();
     }
 
 }
